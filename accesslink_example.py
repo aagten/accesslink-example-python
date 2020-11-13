@@ -38,7 +38,9 @@ class PolarAccessLinkExample(object):
                   "1) Get user information\n" +
                   "2) Check available data\n" +
                   "3) Revoke access token\n" +
-                  "4) Exit\n" +
+                  "4) Get all sleep data\n" +
+                  "5) Get all nightly recharges\n" +
+                  "6) Exit\n"
                   "-----------------------")
             self.get_menu_choice()
 
@@ -48,7 +50,9 @@ class PolarAccessLinkExample(object):
             "1": self.get_user_information,
             "2": self.check_available_data,
             "3": self.revoke_access_token,
-            "4": self.exit
+            "4": self.get_sleep_data,
+            "5": self.get_nightly_recharges,
+            "6": self.exit
         }.get(choice, self.get_menu_choice)()
 
     def get_user_information(self):
@@ -139,6 +143,24 @@ class PolarAccessLinkExample(object):
             pretty_print_json(physical_info)
 
         transaction.commit()
+
+    def get_sleep_data(self):
+        sleep_data = self.accesslink.sleep_data.list(access_token=self.config["access_token"])
+
+        if not sleep_data:
+            print("No sleep data available.")
+            return
+
+        pretty_print_json(sleep_data)
+
+    def get_nightly_recharges(self):
+        nightly_recharges = self.accesslink.nightly_recharge.list(access_token=self.config["access_token"])
+
+        if not nightly_recharges:
+            print("No nightly recharges available.")
+            return
+
+        pretty_print_json(nightly_recharges)
 
 
 if __name__ == "__main__":
